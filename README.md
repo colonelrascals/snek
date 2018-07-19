@@ -16,17 +16,17 @@ A simple clojure build  of the popular game Snake. Using Java Swing as the GUI.
 ```
  $ lein uberjar
 ```
-3a. Run via jar:
+3.Run
+  * via jar:
 
-  ```
-   java -jar snek-0.1.0-standalone.jar [args]
-  ```
+     ```
+      java -jar snek-0.1.0-standalone.jar [args]
+     ```
+  * via leiningen:
 
-3b. Or better yet via leiningen:
-
-  ```
-   lein run -m app.clj
-  ```
+     ```
+      lein run -m app.clj
+     ```
 
 
 ## Options
