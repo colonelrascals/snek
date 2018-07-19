@@ -11,15 +11,15 @@ Leiningen
 ## Usage
 
 To run via jar:
-'''
-$ java -jar snek-0.1.0-standalone.jar [args]
-'''
+```
+ java -jar snek-0.1.0-standalone.jar [args]
+
+```
 
 or better yet via leiningen:
 
-'''
-lein run -m app.clj
-'''
+```lein run -m app.clj```
+
 
 ## Options
 
