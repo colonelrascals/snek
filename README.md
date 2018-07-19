@@ -4,9 +4,9 @@ A simple clojure build  of the popular game Snake. Using Java Swing as the GUI.
 
 ## Requirements:
 
-Clojure 1.8
-Java 8++
-Leiningen
+* Clojure 1.8
+* Java 8++
+* Leiningen
 
 ## Usage
 
