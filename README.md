@@ -30,14 +30,14 @@ A simple clojure build  of the popular game Snake. Using Java Swing as the GUI.
 
 
 ## Core Library Used
-* butlast - returns a sequence of all but the last item in a collection, in linear time.
-* assoc - when applied to map, returns a new map of the same type that contains mapping of keys to vals.
+* **butlast** - returns a sequence of all but the last item in a collection, in linear time.
+* **assoc** - when applied to map, returns a new map of the same type that contains mapping of keys to vals.
 when applied to vector returns new vector that contains the val at index.
-* cons - returns a new sequence where x is the first element and sequence is the rest
-* memoize - returns a memoized version of a referentially transparent function. The memoized version of the funtion
+* **cons** - returns a new sequence where x is the first element and sequence is the rest
+* **memoize** - returns a memoized version of a referentially transparent function. The memoized version of the funtion
 keeps a cache of the mapping from arugments to results and, when calls with the same arugments are repeated has a higher preformence. 
-* with-meta - adds meta-data
-* count - returns number of items in collection
+* **with-meta** - adds meta-data
+* **count** - returns number of items in collection
 
 
 ## Examples
@@ -48,13 +48,11 @@ keeps a cache of the mapping from arugments to results and, when calls with the 
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
-Copyright © 2018 FIXME
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
 
-Distributed under the Eclipse Public License either version 1.0 or (at
+Distributed under the GNU General Public License either version 3.0 or (at
 your option) any later version.
