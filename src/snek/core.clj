@@ -45,13 +45,21 @@
 
 (def length (memorize length))
 
-(defn add-points [])
+(defn add-points [[x0 y0] [x1 y1]])
+"Shifts the head of the snake using the two points"
+[(+ x0 x1) (+ y0 y1)])
 
-(defn move [])
+(defn move [{:keys [body dir] :as snake} grows]
+  "Evals the snake after one move"
+  (assoc snake :body
+         (cons (add-points (first body) dir)
+               (if grows body (butlast body)))))
 
-(defn turn [])
+(defn turn [snake dir]
+  (assoc snake :dir dir))
 
-(defn win? [])
+(defn win? [{body :body level}]
+  (>= (count body) (length level)))
 
 (defn eats-self? [])
 
