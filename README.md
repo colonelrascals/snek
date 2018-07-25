@@ -39,12 +39,7 @@ keeps a cache of the mapping from arugments to results and, when calls with the 
 * **with-meta** - adds meta-data
 * **count** - returns number of items in collection
 
-
-## Examples
-
-...
-
-### Bugs
+## Bugs
 
 ...
 
