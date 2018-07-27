@@ -160,7 +160,60 @@
       (.setColor (vary-color color))
       (.fillRect x y w h))))
 
+(defn game-panel [snake blip level pause timer]
+  (proxy [JPanel ActionListener KeyListener] []
+         (paintComponent [g]
+                         (proxy-super paintComponent g)
+                         (if @pause
+                           (show-text g (str "Level " @level)
+                                      "Press any key to continue...")
+                           (do (paint g @snake)
+                               (paint g @blip))))
+         (actionPerformed [e]
+           (when-not @pause
+             (update-pos snake blip))
+           (when (lose? @snake)
+             (reset-game snake blip pause))
+           (when (win? @snake @level)
+             (swap! level inc)
+             (reset-game snake blip pause)
+             (.setDelay timer (quantum @level)))
+           (.repaint this))
+         (keyPressed [e]
+           (if @pause
+             (dosync (ref-set pause false))
+             (update-dir snake (dirs (.getKeyCode e)))))
+         (windowClosed []
+           (System/exit 0))
+         (keyReleased [e])
+         (keyTyped [e])))
+
+(defn game []
+  (let [snke (ref (new-snake))
+        blip (ref (new-blip-for @snake))
+        level (atom 0)
+        pause (ref true)
+        frame (JFrame. "Snake")
+        timer (Timer. (quantum @level) nil)
+        panel (game-panel snake blip level pause timer)]
+    (doto panel
+      (.setFocusable true)
+      (.addKeyListener panel)
+      (.setBackground background-color)
+      (.setPreferredSize (Dimension. p-width p-height)))
+    (doto frame
+      (.add panel)
+      (.pack)
+      (.setVisible true)
+      (.setResizable false)
+      (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
+      (.setLocationRelativeTo nil))
+    (doto timer
+      (.addActionListener panel)
+      (.start))
+    [snake blip level timer]))
+
 (defn -main
   "This is where I will launch the game."
   [& args]
-  (println "Hello, World!"))
+  (game))
