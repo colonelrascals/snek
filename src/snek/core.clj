@@ -61,15 +61,68 @@
 (defn win? [{body :body level}]
   (>= (count body) (length level)))
 
-(defn eats-self? [])
+(defn eats-self? [[head & tail]]
+  (contains? (set tail) head))
 
-(defn eats-boarder? [])
+(defn eats-boarder? [[[x y]]]
+  (or (>= x c-width)
+      (>= y c-height)
+      (< x 0)
+      (< y 0)))
 
-(defn lose? [])
+(defn lose? [{body :body}]
+  (or (eats-self? body)
+      (eats-boarder? body)))
 
-(defn eats-blip? [])
+(defn eats-blip? [{[head] :body} {[apple] :body}]
+  (= head apple))
 
-(defn screen-rect [])
+(defn screen-rect [[x y]]
+  (map (fn [x] (* point-size x))
+       [x y 1 1]))
+
+(def screen-rect (memorize screen-rect))
+
+;TODO - Create new NS for below
+
+(defn ->color [[r g b]]
+  (Color. r g b))
+
+(defn bright-color []
+  (->> (repeatedly #(rand-int 256))
+       (partition 3 1)
+       (some #(when (= (apply + %) bright-sum) %))))
+
+(defn contrast? [x y]
+  (letfn [(diff [x y] (Math/abs (- x y)))]
+    (if (>= (apply + (map diff x y))
+            bright-diff)
+      y nil)))
+
+(defn contrast-color [color]
+  (->> (repeatedly bright-color)
+       (some (partial contrast? color))))
+
+9(defn vary-component [x]
+   (letfn [(pm [x] [(rand-int x) (rand-int (- x))])]
+     (let [x (apply + x (pm color-variation))]
+       (cond (> x 255) 255
+             (< x 0) 0
+             :else x))))
+
+(defn vary-color [color]
+  (->color (map vary-component color)))
+
+(defn new-snake []
+  {:body (list [1 1])
+   :dir [1 0]
+   :color (bright-color)})
+
+(defn new-blip-for [{color :color}]
+  {:body [[(rand-int c-width)
+           (rand-int c-height)]]
+   :color (contrast-color color)})
+
 
 
 (defn -main
