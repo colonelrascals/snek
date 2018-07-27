@@ -122,8 +122,29 @@
   {:body [[(rand-int c-width)
            (rand-int c-height)]]
    :color (contrast-color color)})
+                                        ;
+;TODO - Seperate to new NS
 
+(defn reset-game [snake blip pause]
+  (dosync
+   (ref-set snake (new-snake))
+   (ref-set blip (new-blip-for @snake))
+   (ref-set pause true))
+  nil)
 
+(defn update-dir [snake dir]
+  (when dir
+    (dosync (alter snake turn dir))))
+
+(defn update-pos [snake blip]
+  (dosync
+   (if (eats-blip? @snake @blip)
+     (do (ref-set blip (new-blip-for @snake))
+         (alter snake move true))
+     (alter snake move false)))
+  nil)
+
+;TODO BUILD THE GUI
 
 (defn -main
   "I don't do a whole lot ... yet."
