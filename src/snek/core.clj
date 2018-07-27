@@ -146,7 +146,21 @@
 
 ;TODO BUILD THE GUI
 
+(defn show-text [g title subtitle]
+    (doto g
+      (.setColor text-color)
+      (.setFont (Font. "Tahoma" Font/TRUETYPE_FONT 30))
+      (.drawString title 80 120)
+      (.setFont (Font. "Tahoma" Font/TRUETYPE_FONT 12))
+      (.drawString subtitle 60 150)))
+
+(defn paint [g {:keys [body color]}]
+  (doseq [[x y w h] (map screen-rect body)]
+    (doto g
+      (.setColor (vary-color color))
+      (.fillRect x y w h))))
+
 (defn -main
-  "I don't do a whole lot ... yet."
+  "This is where I will launch the game."
   [& args]
   (println "Hello, World!"))
