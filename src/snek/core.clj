@@ -1,6 +1,6 @@
 (ns snek.core
   (:import
-   (java.awt Color Dimension)
+   (java.awt Color Dimension Font)
    (javax.swing JPanel JFrame Timer JOptionPane)
    (java.awt.event ActionListener KeyListener KeyEvent))
   (:gen-class))
@@ -37,15 +37,21 @@
    KeyEvent/VK_UP [0 -1]
    KeyEvent/VK_DOWN [0 1]})
 
+(def color-variation 35)
+(def bright-sum 350)
+(def bright-diff 250)
+(def background-color (Color/WHITE))
+(def text-color (Color/DARK_GRAY))
+
 (defn quantum [level]
   (max (+ i-length (* level d-length)) m-quantum))
 
 (defn length [level]
   (+ i-length (* level d-length)))
 
-(def length (memorize length))
+(def length (memoize length))
 
-(defn add-points [[x0 y0] [x1 y1]])
+(defn add-points [[x0 y0] [x1 y1]]
 "Shifts the head of the snake using the two points"
 [(+ x0 x1) (+ y0 y1)])
 
@@ -58,7 +64,7 @@
 (defn turn [snake dir]
   (assoc snake :dir dir))
 
-(defn win? [{body :body level}]
+(defn win? [{body :body} level]
   (>= (count body) (length level)))
 
 (defn eats-self? [[head & tail]]
@@ -81,7 +87,7 @@
   (map (fn [x] (* point-size x))
        [x y 1 1]))
 
-(def screen-rect (memorize screen-rect))
+(def screen-rect (memoize screen-rect))
 
 ;TODO - Create new NS for below
 
@@ -182,14 +188,14 @@
          (keyPressed [e]
            (if @pause
              (dosync (ref-set pause false))
-             (update-dir snake (dirs (.getKeyCode e)))))
+             (update-dir snake (directions (.getKeyCode e)))))
          (windowClosed []
            (System/exit 0))
          (keyReleased [e])
          (keyTyped [e])))
 
 (defn game []
-  (let [snke (ref (new-snake))
+  (let [snake (ref (new-snake))
         blip (ref (new-blip-for @snake))
         level (atom 0)
         pause (ref true)
