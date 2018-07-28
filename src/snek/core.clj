@@ -3,14 +3,17 @@
    (java.awt Color Dimension Font)
    (javax.swing JPanel JFrame Timer JOptionPane)
    (java.awt.event ActionListener KeyListener KeyEvent))
+  (:require [snek.color :as color])
   (:gen-class))
 
+
+;TODO - Replace java.awt calls with proper NS
 ;-----------------------
 ;helpers
 ;-----------------------
 
 (defmacro def-with-docs [name docstring value]
-  `(def ~(with-meta name {:doc docstring}) ~value))
+  `(def ~(with-meta name {:doc do string}) ~value))
 
 ;------------------------
 ;constants
@@ -37,11 +40,11 @@
    KeyEvent/VK_UP [0 -1]
    KeyEvent/VK_DOWN [0 1]})
 
-(def color-variation 35)
-(def bright-sum 350)
-(def bright-diff 250)
-(def background-color (Color/WHITE))
-(def text-color (Color/DARK_GRAY))
+;(def color-variation 35)
+;(def bright-sum 350)
+;(def bright-diff 250)
+;(def background-color (Color/WHITE))
+;(def text-color (Color/DARK_GRAY))
 
 (defn quantum [level]
   (max (+ i-length (* level d-length)) m-quantum))
@@ -90,44 +93,44 @@
 (def screen-rect (memoize screen-rect))
 
 ;TODO - Create new NS for below
+;; v
+;; (defn ->color [[r g b]]
+;;   (Color. r g b))
 
-(defn ->color [[r g b]]
-  (Color. r g b))
+;; (defn bright-color []
+;;   (->> (repeatedly #(rand-int 256))
+;;        (partition 3 1)
+;;        (some #(when (= (apply + %) bright-sum) %))))
 
-(defn bright-color []
-  (->> (repeatedly #(rand-int 256))
-       (partition 3 1)
-       (some #(when (= (apply + %) bright-sum) %))))
+;; (defn contrast? [x y]
+;;   (letfn [(diff [x y] (Math/abs (- x y)))]
+;;     (if (>= (apply + (map diff x y))
+;;             bright-diff)
+;;       y nil)))
 
-(defn contrast? [x y]
-  (letfn [(diff [x y] (Math/abs (- x y)))]
-    (if (>= (apply + (map diff x y))
-            bright-diff)
-      y nil)))
+;; (defn contrast-color [color]
+;;   (->> (repeatedly bright-color)
+;;        (some (partial contrast? color))))
 
-(defn contrast-color [color]
-  (->> (repeatedly bright-color)
-       (some (partial contrast? color))))
+;; 9(defn vary-component [x]
+;;    (letfn [(pm [x] [(rand-int x) (rand-int (- x))])]
+;;      (let [x (apply + x (pm color-variation))]
+;;        (cond (> x 255) 255
+;;              (< x 0) 0
+;;              :else x))))
 
-9(defn vary-component [x]
-   (letfn [(pm [x] [(rand-int x) (rand-int (- x))])]
-     (let [x (apply + x (pm color-variation))]
-       (cond (> x 255) 255
-             (< x 0) 0
-             :else x))))
+;; (defn vary-color [color]
+;;   (->color (map vary-component color)))
 
-(defn vary-color [color]
-  (->color (map vary-component color)))
+;; (defn new-snake []
+;;   {:body (list [1 1])
+;;    :dir [1 0]
+;;    :color (bright-color)})
 
-(defn new-snake []
-  {:body (list [1 1])
-   :dir [1 0]
-   :color (bright-color)})
-
-(defn new-blip-for [{color :color}]
-  {:body [[(rand-int c-width)
-           (rand-int c-height)]]
-   :color (contrast-color color)})
+;; (defn new-blip-for [{color :color}]
+;;   {:body [[(rand-int c-width)
+;;            (rand-int c-height)]]
+;;    :color (contrast-color color)})
                                         ;
 ;TODO - Seperate to new NS
 
