@@ -3,7 +3,8 @@
    (java.awt Dimension Font)
    (javax.swing JPanel JFrame Timer JOptionPane)
    (java.awt.event ActionListener KeyListener KeyEvent))
-  (:require [snek.color :as color])
+  (:require [snek.color :as color]
+            [snek.util :as util])
   (:gen-class))
 
 
