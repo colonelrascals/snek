@@ -4,7 +4,7 @@
    (javax.swing JPanel JFrame Timer JOptionPane)
    (java.awt.event ActionListener KeyListener KeyEvent))
   (:require [snek.color :as color]
-            [snek.util :as util])
+            [snek.util :refer :all])
   (:gen-class))
 
 (defn reset-game [snake blip pause]
