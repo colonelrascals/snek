@@ -1,7 +1,9 @@
 (ns snek.color
   (:import
-   (java.awt Color Dimension Font)))
+   (java.awt Color)))
 
+(def c-width 50)
+(def c-height 30)
 (def color-variation 35)
 (def bright-sum 350)
 (def bright-diff 250)

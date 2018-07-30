@@ -1,6 +1,6 @@
 (ns snek.core
   (:import
-   (java.awt Color Dimension Font)
+   (java.awt Dimension Font)
    (javax.swing JPanel JFrame Timer JOptionPane)
    (java.awt.event ActionListener KeyListener KeyEvent))
   (:require [snek.color :as color])
@@ -13,7 +13,7 @@
 ;-----------------------
 
 (defmacro def-with-docs [name docstring value]
-  `(def ~(with-meta name {:doc do string}) ~value))
+  `(def ~(with-meta name {:doc docstring}) ~value))
 
 ;------------------------
 ;constants
@@ -24,27 +24,19 @@
 ;
 ;------------------------
 
-(def c-width 50)
-(def c-height 30)
 (def point-size 15)
 (def i-quantum 100)
 (def d-quantum -5)
 (def m-quantum 50)
 (def i-length 5)
 (def d-length 3)
-(def p-width (* c-width point-size))
-(def p-height (* c-height point-size))
+(def p-width (* color/c-width point-size))
+(def p-height (* color/c-height point-size))
 (def-with-docs directions "Using Java KeyEvent Class. VK indicates virtual key codes. See https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html for more info"
   {KeyEvent/VK_LEFT [-1 0]
    KeyEvent/VK_RIGHT [1 0]
    KeyEvent/VK_UP [0 -1]
    KeyEvent/VK_DOWN [0 1]})
-
-;(def color-variation 35)
-;(def bright-sum 350)
-;(def bright-diff 250)
-;(def background-color (Color/WHITE))
-;(def text-color (Color/DARK_GRAY))
 
 (defn quantum [level]
   (max (+ i-length (* level d-length)) m-quantum))
@@ -74,8 +66,8 @@
   (contains? (set tail) head))
 
 (defn eats-boarder? [[[x y]]]
-  (or (>= x c-width)
-      (>= y c-height)
+  (or (>= x color/c-width)
+      (>= y color/c-height)
       (< x 0)
       (< y 0)))
 
@@ -92,52 +84,12 @@
 
 (def screen-rect (memoize screen-rect))
 
-;TODO - Create new NS for below
-;; v
-;; (defn ->color [[r g b]]
-;;   (Color. r g b))
-
-;; (defn bright-color []
-;;   (->> (repeatedly #(rand-int 256))
-;;        (partition 3 1)
-;;        (some #(when (= (apply + %) bright-sum) %))))
-
-;; (defn contrast? [x y]
-;;   (letfn [(diff [x y] (Math/abs (- x y)))]
-;;     (if (>= (apply + (map diff x y))
-;;             bright-diff)
-;;       y nil)))
-
-;; (defn contrast-color [color]
-;;   (->> (repeatedly bright-color)
-;;        (some (partial contrast? color))))
-
-;; 9(defn vary-component [x]
-;;    (letfn [(pm [x] [(rand-int x) (rand-int (- x))])]
-;;      (let [x (apply + x (pm color-variation))]
-;;        (cond (> x 255) 255
-;;              (< x 0) 0
-;;              :else x))))
-
-;; (defn vary-color [color]
-;;   (->color (map vary-component color)))
-
-;; (defn new-snake []
-;;   {:body (list [1 1])
-;;    :dir [1 0]
-;;    :color (bright-color)})
-
-;; (defn new-blip-for [{color :color}]
-;;   {:body [[(rand-int c-width)
-;;            (rand-int c-height)]]
-;;    :color (contrast-color color)})
-                                        ;
 ;TODO - Seperate to new NS
 
 (defn reset-game [snake blip pause]
   (dosync
-   (ref-set snake (new-snake))
-   (ref-set blip (new-blip-for @snake))
+   (ref-set snake (color/new-snake))
+   (ref-set blip (color/new-blip-for @snake))
    (ref-set pause true))
   nil)
 
@@ -148,7 +100,7 @@
 (defn update-pos [snake blip]
   (dosync
    (if (eats-blip? @snake @blip)
-     (do (ref-set blip (new-blip-for @snake))
+     (do (ref-set blip (color/new-blip-for @snake))
          (alter snake move true))
      (alter snake move false)))
   nil)
@@ -157,7 +109,7 @@
 
 (defn show-text [g title subtitle]
     (doto g
-      (.setColor text-color)
+      (.setColor color/text-color)
       (.setFont (Font. "Tahoma" Font/TRUETYPE_FONT 30))
       (.drawString title 80 120)
       (.setFont (Font. "Tahoma" Font/TRUETYPE_FONT 12))
@@ -166,7 +118,7 @@
 (defn paint [g {:keys [body color]}]
   (doseq [[x y w h] (map screen-rect body)]
     (doto g
-      (.setColor (vary-color color))
+      (.setColor (color/vary-color color))
       (.fillRect x y w h))))
 
 (defn game-panel [snake blip level pause timer]
@@ -198,8 +150,8 @@
          (keyTyped [e])))
 
 (defn game []
-  (let [snake (ref (new-snake))
-        blip (ref (new-blip-for @snake))
+  (let [snake (ref (color/new-snake))
+        blip (ref (color/new-blip-for @snake))
         level (atom 0)
         pause (ref true)
         frame (JFrame. "Snake")
@@ -208,7 +160,7 @@
     (doto panel
       (.setFocusable true)
       (.addKeyListener panel)
-      (.setBackground background-color)
+      (.setBackground color/background-color)
       (.setPreferredSize (Dimension. p-width p-height)))
     (doto frame
       (.add panel)
